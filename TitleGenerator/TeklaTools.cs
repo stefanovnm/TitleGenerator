@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Windows.Forms;
 using Tekla.Structures.Drawing;
 using Tekla.Structures.Model;
 
@@ -127,6 +127,8 @@ namespace TitleGenerator
 
                 currentDrawingInfo.BaseName = drawing.GetType() + drawing.Mark;
 
+                currentDrawingInfo.DrawingName = drawing.Name;
+
                 drawing.GetUserProperty("PM_DRAWING_TITLE_1", ref title1);
                 drawing.GetUserProperty("PM_DRAWING_TITLE_2", ref title2);
                 drawing.GetUserProperty("Nr_dokumentu", ref number);
@@ -134,10 +136,9 @@ namespace TitleGenerator
 
                 currentDrawingInfo.DrawingTitle1 = title1;
                 currentDrawingInfo.DrawingTitle2 = title2;
+                currentDrawingInfo.DrawingTitle2Expanded = this.ReturnFullTitle(title2);
                 currentDrawingInfo.DrawingProjectNumber = projectNumber;
                 currentDrawingInfo.DrawingNumber = number;
-
-                listOfDrawings.Add(currentDrawingInfo);
 
                 name = currentDrawingInfo.ToString();
             }
@@ -193,6 +194,8 @@ namespace TitleGenerator
 
                 currentDrawingInfo.BaseName = drawing.GetType() + drawing.Mark;
 
+                currentDrawingInfo.DrawingName = drawing.Name;
+
                 drawing.GetUserProperty("PM_DRAWING_TITLE_1", ref title1);
                 drawing.GetUserProperty("PM_DRAWING_TITLE_2", ref title2);
                 drawing.GetUserProperty("Nr_dokumentu", ref number);
@@ -200,9 +203,9 @@ namespace TitleGenerator
 
                 currentDrawingInfo.DrawingTitle1 = title1;
                 currentDrawingInfo.DrawingTitle2 = title2;
+                currentDrawingInfo.DrawingTitle2Expanded = this.ReturnFullTitle(title2);
                 currentDrawingInfo.DrawingProjectNumber = projectNumber;
                 currentDrawingInfo.DrawingNumber = number;
-                currentDrawingInfo.DrawingTitle2Full = this.ExpandTitle(title2.Remove(0,4));
 
                 result += currentDrawingInfo.ToString() + "\n";
             }
@@ -216,23 +219,32 @@ namespace TitleGenerator
                     outputFile.WriteLine(line);
                 }
             }
+
+            MessageBox.Show("All done!");
         }
 
-        public void WriteNumber(string number)
+        public void WriteNumber(string file)
         {
             DrawingHandler drawingHandler = new DrawingHandler();
 
             DrawingEnumerator selectedDrawings = drawingHandler.GetDrawingSelector().GetSelected();
 
-            int num = 300;
-            int index = 0;
+            FileInfo toRead = new FileInfo();
+
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+
+            dictionary = toRead.ConvertFileToDictionary(file);
+
             while (selectedDrawings.MoveNext())
             {
                 Drawing drawing = selectedDrawings.Current;
 
-                drawing.SetUserProperty("Nr_dokumentu", number + (num + index).ToString());
+                string searchedNumber = drawing.GetType() + drawing.Mark;
+
+                string result = toRead.ReturnNumberFromDictionary(searchedNumber, dictionary);
+
+                drawing.SetUserProperty("Nr_dokumentu", result);
                 drawing.CommitChanges();
-                index++;
             }
         }
 
@@ -364,6 +376,19 @@ namespace TitleGenerator
             }
 
             result = result.Remove(result.Length - 2);
+
+            return result;
+        }
+
+        private string ReturnFullTitle(string title)
+        {
+            string result = string.Empty;
+
+            if (title.Length > 4)
+            {
+                string title2 = title.Remove(0, 4);
+                result = this.ExpandTitle(title2);
+            }
 
             return result;
         }

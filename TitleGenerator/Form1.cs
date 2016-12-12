@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace TitleGenerator
@@ -45,10 +47,11 @@ namespace TitleGenerator
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string number = textBox3.Text;
+            string file = textBox3.Text;
 
             var tool = new TeklaTools();
-            tool.WriteNumber(number);
+
+            tool.WriteNumber(file);
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -72,6 +75,24 @@ namespace TitleGenerator
             label4.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\drawings.csv";
             var tool = new TeklaTools();
             tool.ReturnFullNameToTextFile();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Stream myStream = null;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                textBox3.Text = openFileDialog1.FileName.ToString();
+            }
+
+            
         }
     }
 }

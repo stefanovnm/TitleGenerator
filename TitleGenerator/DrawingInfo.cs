@@ -7,7 +7,8 @@
         private string drawingProjectNumber;
         private string drawingTitle1;
         private string drawingTitle2;
-        private string drawingTitle2Full;
+        private string drawingName;
+        private string drawingTitle2Expanded;
 
         public DrawingInfo()
         {
@@ -16,6 +17,7 @@
             this.DrawingProjectNumber = string.Empty;
             this.DrawingTitle1 = string.Empty;
             this.DrawingTitle2 = string.Empty;
+            this.DrawingName = string.Empty;
         }
 
         public string BaseName
@@ -83,22 +85,36 @@
             }
         }
 
-        public string DrawingTitle2Full
+        public string DrawingTitle2Expanded
         {
             get
             {
-                return this.drawingTitle2Full;
+                return this.drawingTitle2Expanded;
             }
 
             set
             {
-                this.drawingTitle2Full = value;
+                this.drawingTitle2Expanded = value;
+            }
+        }
+
+        public string DrawingName
+        {
+            get
+            {
+                return this.drawingName;
+            }
+
+            set
+            {
+                this.drawingName = value;
             }
         }
 
         public override string ToString()
         {
-            return this.BaseName + ";" + this.DrawingNumber + ";" + this.DrawingProjectNumber + ";" + this.DrawingTitle1 + ";" + this.DrawingTitle2 + ";" + this.DrawingTitle2Full;
+            return this.BaseName + ";" + this.DrawingName + ";" + this.DrawingNumber + ";" + this.DrawingTitle2 + ";" + this.drawingTitle2Expanded;
+            // return this.BaseName + ";" + this.DrawingNumber + ";" + this.DrawingProjectNumber + ";" + this.DrawingTitle1 + ";" + this.DrawingTitle2 + ";" + this.DrawingName;
         }
     }
 }
