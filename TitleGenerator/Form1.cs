@@ -94,5 +94,11 @@ namespace TitleGenerator
 
             
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var tool = new TeklaTools();
+            tool.ReturnFullNameToTextFileGA();
+        }
     }
 }

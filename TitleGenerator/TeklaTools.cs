@@ -185,6 +185,7 @@ namespace TitleGenerator
             string title2 = string.Empty;
             string number = string.Empty;
             string projectNumber = string.Empty;
+            string drType = string.Empty;
 
             while (selectedDrawings.MoveNext())
             {
@@ -198,12 +199,69 @@ namespace TitleGenerator
 
                 drawing.GetUserProperty("PM_DRAWING_TITLE_1", ref title1);
                 drawing.GetUserProperty("PM_DRAWING_TITLE_2", ref title2);
+                drawing.GetUserProperty("PM_DRAWING_TYPE", ref drType);
                 drawing.GetUserProperty("Nr_dokumentu", ref number);
                 drawing.GetUserProperty("Nr_projektu", ref projectNumber);
 
                 currentDrawingInfo.DrawingTitle1 = title1;
                 currentDrawingInfo.DrawingTitle2 = title2;
+                currentDrawingInfo.DrawingType = drType;
                 currentDrawingInfo.DrawingTitle2Expanded = this.ReturnFullTitle(title2);
+                currentDrawingInfo.DrawingProjectNumber = projectNumber;
+                currentDrawingInfo.DrawingNumber = number;
+
+                result += currentDrawingInfo.ToString() + "\n";
+            }
+
+            var lines = result.Split('\n');
+
+            using (StreamWriter outputFile = new StreamWriter(path + @"\" + document))
+            {
+                foreach (string line in lines)
+                {
+                    outputFile.WriteLine(line);
+                }
+            }
+
+            MessageBox.Show("All done!");
+        }
+
+        public void ReturnFullNameToTextFileGA()
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string document = "drawingsGA.csv";
+
+            DrawingHandler drawingHandler = new DrawingHandler();
+
+            DrawingEnumerator selectedDrawings = drawingHandler.GetDrawingSelector().GetSelected();
+
+            string result = string.Empty;
+
+            string title1 = string.Empty;
+            string title2 = string.Empty;
+            string number = string.Empty;
+            string projectNumber = string.Empty;
+            string drType = string.Empty;
+
+            while (selectedDrawings.MoveNext())
+            {
+                var currentDrawingInfo = new DrawingInfo();
+
+                Drawing drawing = selectedDrawings.Current;
+
+                currentDrawingInfo.BaseName = drawing.GetType() + drawing.Mark;
+
+                currentDrawingInfo.DrawingName = drawing.Name;
+
+                drawing.GetUserProperty("PM_DRAWING_TITLE_1", ref title1);
+                drawing.GetUserProperty("PM_DRAWING_TITLE_2", ref title2);
+                drawing.GetUserProperty("PM_DRAWING_TYPE", ref drType);
+                drawing.GetUserProperty("Nr_dokumentu", ref number);
+                drawing.GetUserProperty("Nr_projektu", ref projectNumber);
+
+                currentDrawingInfo.DrawingTitle1 = title1;
+                currentDrawingInfo.DrawingTitle2 = title2;
+                currentDrawingInfo.DrawingType = drType;
                 currentDrawingInfo.DrawingProjectNumber = projectNumber;
                 currentDrawingInfo.DrawingNumber = number;
 

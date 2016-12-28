@@ -9,6 +9,7 @@
         private string drawingTitle2;
         private string drawingName;
         private string drawingTitle2Expanded;
+        private string drawingType;
 
         public DrawingInfo()
         {
@@ -43,6 +44,19 @@
             set
             {
                 this.drawingNumber = value;
+            }
+        }
+
+        public string DrawingType
+        {
+            get
+            {
+                return this.drawingType;
+            }
+
+            set
+            {
+                this.drawingType = value;
             }
         }
 
@@ -113,7 +127,7 @@
 
         public override string ToString()
         {
-            return this.BaseName + ";" + this.DrawingName + ";" + this.DrawingNumber + ";" + this.DrawingTitle2 + ";" + this.drawingTitle2Expanded;
+            return this.BaseName + ";" + this.DrawingName + ";" + this.DrawingNumber + ";" + this.DrawingTitle2 + ";" + this.DrawingTitle2Expanded + ";" + this.DrawingTitle1 + ";" + this.DrawingType;
             // return this.BaseName + ";" + this.DrawingNumber + ";" + this.DrawingProjectNumber + ";" + this.DrawingTitle1 + ";" + this.DrawingTitle2 + ";" + this.DrawingName;
         }
     }
